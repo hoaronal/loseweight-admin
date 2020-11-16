@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -jar target/loseweight-1.0.jar -Dserver.port=$PORT $JAR_OPTS
+web:    java -cp target/classes:target/dependency/* -Dserver.port=8080 com/loseweight/Application
