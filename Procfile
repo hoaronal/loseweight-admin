@@ -1,1 +1,1 @@
-web: java -jar build/libs/loseweight-1.0.jar
+web: java -jar target/loseweight-1.0.jar
