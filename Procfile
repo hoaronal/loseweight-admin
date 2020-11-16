@@ -1,1 +1,1 @@
-web:    java -cp target/classes:target/dependency/* -Dserver.port=8080 com/loseweight/Application
+web: java -jar build/libs/loseweight-1.0.jar
