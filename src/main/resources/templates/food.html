@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/layout">
+
+<head>
+</head>
+
+<body>
+
+<!-- ============================================================== -->
+<!-- Container fluid  -->
+<!-- ============================================================== -->
+<div class="container-fluid" layout:fragment="content">
+    <!-- ============================================================== -->
+    <!-- Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <div class="row page-titles">
+        <div class="col-md-5 col-8 align-self-center">
+            <h3 class="text-themecolor m-b-0 m-t-0">Foods Details</h3>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="home">Home</a></li>
+                <li class="breadcrumb-item active">Foods</li>
+            </ol>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <!-- Row -->
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('#foodList').DataTable({
+            pageLength:10,
+            ajax: {
+                url: '/api_food',
+                dataSrc: '',
+            },
+            "columns": [
+                { title: "Id", data: "id" },
+                { title: "Name", data: "name" },
+                { title: "Code", data: "code" },
+                { title: "Description", data: "description" },
+                { title: "Calo", data: "calo" },
+                { title: "Prepare time", data: "prepare_time" },
+                { title: "Cooking time", data: "cooking_time" },
+                { title: "Recommend level", data: "recommend_level" },
+                { title: "Total like", data: "total_like" },
+                { title: "Image", data: "image" },
+            ]
+        })
+    })
+    </script>
+    <div class="row">
+        <!-- column -->
+        <div class="col-lg-8 col-md-7">
+            <div class="card">
+                <div class="card-block">
+                    <h4 class="card-title">Foods</h4>
+                    <div class="table-responsive">
+                        <table id="foodList" class="table">
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-5">
+            <div class="card">
+                <div class="card-block">
+                    <h3 class="card-title">Add New Food</h3>
+                    <h6 class="card-subtitle">Enter details</h6>
+                    <form method="POST" class="form-horizontal form-material" th:action="@{/food}" th:object="${foodFormData}">
+                        <div class="form-group">
+                            <label for="code" class="col-md-12">Food Code</label>
+                            <div class="col-md-12">
+                                <input type="text" th:field="*{code}" class="form-control form-control-line" name="code" id="code">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="code" class="col-md-12">Name</label>
+                            <div class="col-md-12">
+                                <input type="text" th:field="*{name}" class="form-control form-control-line" name="name" id="name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="code" class="col-md-12">Description</label>
+                            <div class="col-md-12">
+                                <input type="text" th:field="*{description}" class="form-control form-control-line" name="description" id="description">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="code" class="col-md-12">Total like</label>
+                            <div class="col-md-12">
+                                <input type="text" th:field="*{total_like}" class="form-control form-control-line" name="total_like" id="total_like">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="code" class="col-md-12">Prepare Time</label>
+                            <div class="col-md-12">
+                                <input type="text" th:field="*{prepare_time}" class="form-control form-control-line" name="prepare_time" id="prepare_time">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="code" class="col-md-12">Recommend level</label>
+                            <div class="col-md-12">
+                                <input type="text" th:field="*{recommend_level}" class="form-control form-control-line" name="recommend_level" id="recommend_level">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="code" class="col-md-12">Cooking time</label>
+                            <div class="col-md-12">
+                                <input type="text" th:field="*{cooking_time}" class="form-control form-control-line" name="cooking_time" id="cooking_time">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="code" class="col-md-12">Image</label>
+                            <div class="col-md-12">
+                                <input type="text" th:field="*{image}" class="form-control form-control-line" name="image" id="image">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <button class="btn btn-success">Add Food</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Row -->
+    <!-- ============================================================== -->
+    <!-- End PAge Content -->
+    <!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Container fluid  -->
+<!-- ============================================================== -->
+</body>
+
+</html>

@@ -13,7 +13,7 @@ import com.loseweight.repository.user.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
@@ -24,7 +24,7 @@ import static com.loseweight.exception.EntityType.USER;
 import static com.loseweight.exception.ExceptionType.DUPLICATE_ENTITY;
 import static com.loseweight.exception.ExceptionType.ENTITY_NOT_FOUND;
 
-@Component
+@Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;

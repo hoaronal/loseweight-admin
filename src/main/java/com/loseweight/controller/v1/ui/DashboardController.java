@@ -1,14 +1,16 @@
 package com.loseweight.controller.v1.ui;
 
 import com.loseweight.controller.v1.command.*;
-import com.loseweight.dto.model.bus.AgencyDto;
-import com.loseweight.dto.model.bus.BusDto;
-import com.loseweight.dto.model.bus.StopDto;
-import com.loseweight.dto.model.bus.TripDto;
+import com.loseweight.dto.model.bus.*;
+import com.loseweight.dto.model.bus.FoodDto;
 import com.loseweight.dto.model.user.UserDto;
+import com.loseweight.model.food.Food;
 import com.loseweight.service.BusReservationService;
+import com.loseweight.service.FoodReservationService;
 import com.loseweight.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -16,20 +18,27 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
 
 @Controller
+@RequiredArgsConstructor
 public class DashboardController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private BusReservationService busReservationService;
+
+    private final BusReservationService busReservationService;
+
+
+    private final FoodReservationService foodReservationService;
+
+    private final HttpServletResponse httpResponse;
 
     @GetMapping(value = "/dashboard")
     public ModelAndView dashboard() {
@@ -83,6 +92,49 @@ public class DashboardController {
         modelAndView.addObject("agency", agencyDto);
         modelAndView.addObject("busFormData", new BusFormCommand());
         modelAndView.addObject("userName", userDto.getFullName());
+        return modelAndView;
+    }
+
+    @GetMapping(value = "/api_food")
+    @ResponseBody
+    public ResponseEntity<Iterable<Food>> getFoodApi() {
+        Iterable<Food> foodDto = foodReservationService.findAll();
+        return new ResponseEntity<>(foodDto, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/food")
+    public ModelAndView getFoodData() {
+        ModelAndView modelAndView = new ModelAndView("food");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDto userDto = userService.findUserByEmail(auth.getName());
+        Iterable<Food> foodDto = foodReservationService.findAll();
+        modelAndView.addObject("foods", foodDto);
+        modelAndView.addObject("foodFormData", new FoodFormCommand());
+        modelAndView.addObject("userName", userDto.getFullName());
+        return modelAndView;
+    }
+
+    @PostMapping(value = "/food")
+    public ModelAndView addNewFood(@Valid @ModelAttribute("foodFormData") FoodFormCommand foodFormCommand, BindingResult bindingResult){
+        ModelAndView modelAndView = new ModelAndView("food");
+        if (!bindingResult.hasErrors()) {
+            try {
+                FoodDto foodData = new FoodDto()
+                        .setName(foodFormCommand.getName())
+                        .setDescription(foodFormCommand.getDescription())
+                        .setCalo(foodFormCommand.getCalo())
+                        .setCode(foodFormCommand.getCode())
+                        .setCooking_time(foodFormCommand.getCooking_time())
+                        .setPrepare_time(foodFormCommand.getPrepare_time())
+                        .setTotal_like(foodFormCommand.getTotal_like())
+                        .setRecommend_level(foodFormCommand.getRecommend_level())
+                        .setImage(foodFormCommand.getImage());
+                foodReservationService.createFood(foodData);
+                httpResponse.sendRedirect("/food");
+            } catch (Exception ex) {
+                bindingResult.rejectValue("code", "error.busFormCommand", ex.getMessage());
+            }
+        }
         return modelAndView;
     }
 

@@ -16,13 +16,14 @@ import com.loseweight.repository.user.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-@Component
+@Service
 public class BusReservationServiceImpl implements BusReservationService {
     @Autowired
     private AgencyRepository agencyRepository;
